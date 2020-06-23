@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="3.8.1" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Voting2020.Core\Voting2020.Core.csproj" />
+    <ProjectReference Include="..\Voting2020.Visualization\Voting2020.Visualization.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<_OutputVoteData Include="$(MSBuildProjectDirectory)\$(OutputPath)" />
+		<_VoteData Include="$(MSBuildProjectDirectory)\..\..\data\**\*.*" />
+	</ItemGroup>
+
+	<Target Name="CopyVoteData" AfterTargets="Build">
+		<Copy SourceFiles="@(_VoteData)" DestinationFolder="$(MSBuildProjectDirectory)\$(OutputPath)\%(RecursiveDir)" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
+	</Target>
+
+</Project>

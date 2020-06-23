@@ -1,0 +1,30 @@
+﻿<Window x:Class="VoteAnalyzer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VoteAnalyzer" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:oxy="http://oxyplot.org/wpf"
+        mc:Ignorable="d"
+		SnapsToDevicePixels="True"
+        Title="MainWindow" Height="450" Width="800">
+    <xctk:BusyIndicator x:Name="_busyIndicator">
+        <DockPanel>
+            <Menu IsMainMenu="True" DockPanel.Dock="Top">
+            </Menu>
+            <TabControl TabStripPlacement="Left">
+                <TabItem Header="(e) Block Timestamp">
+                    <oxy:PlotView x:Name="_blockTimestampPlotView"/>
+                </TabItem>
+				<TabItem Header="(e) Block Time">
+					<oxy:PlotView x:Name="_blockTimePlotView"/>
+				</TabItem>
+				<TabItem Header="(e) Transaction per block">
+					<oxy:PlotView x:Name="_transactionPerBlockPlotView"/>
+				</TabItem>
+				<TabItem Header="(e) Transaction per block Timeline">
+					<oxy:PlotView x:Name="_transactionPerBlockTimelinePlotView"/>
+				</TabItem>
+			</TabControl>
+        </DockPanel>
+    </xctk:BusyIndicator>
+</Window>
