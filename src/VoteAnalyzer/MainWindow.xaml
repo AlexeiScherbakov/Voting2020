@@ -12,9 +12,20 @@
             <Menu IsMainMenu="True" DockPanel.Dock="Top">
             </Menu>
             <TabControl TabStripPlacement="Left">
-                <TabItem Header="(e) Block Timestamp">
+                <TabItem Header="(e) Block Timestamp [g]">
                     <oxy:PlotView x:Name="_blockTimestampPlotView"/>
                 </TabItem>
+				<TabItem Header="(e) Block Timestamp [t]">
+					<DataGrid x:Name="_blockTimestampGridView" AutoGenerateColumns="False"
+							  CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
+							  VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.CacheLengthUnit="Page"
+							  VirtualizingPanel.CacheLength="2" VirtualizingPanel.ScrollUnit="Item">
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="Block Number" IsReadOnly="True" Binding="{Binding Path=BlockNumber,Mode=OneTime}"/>
+							<DataGridTextColumn Header="Block Timestamp" IsReadOnly="True" Binding="{Binding Path=Data,Mode=OneTime}"/>
+						</DataGrid.Columns>
+					</DataGrid>
+				</TabItem>
 				<TabItem Header="(e) Block Time">
 					<oxy:PlotView x:Name="_blockTimePlotView"/>
 				</TabItem>

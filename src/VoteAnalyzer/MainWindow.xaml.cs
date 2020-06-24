@@ -70,6 +70,11 @@ namespace VoteAnalyzer
 				var graphItems = BlockGraphBuilder.BlockStart(voteRecords, x => x.BlockNumber, x => x.Time);
 				_blockTimestamp.ShowLinearIntepolatedBlockGraphItems(true, graphItems);
 				blockTimestampInterpolator = new BlockTimestampInterpolator(graphItems);
+
+				Dispatcher.Invoke(delegate
+				{
+					_blockTimestampGridView.ItemsSource = graphItems;
+				});
 			}
 			// среднее время вычисления блока
 			{

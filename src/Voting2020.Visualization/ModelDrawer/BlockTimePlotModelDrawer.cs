@@ -116,11 +116,21 @@ namespace Voting2019.Visualization
 					var prevAverageBlock = array[i].BlockNumber - 1;
 					if (lastBlock < prevAverageBlock)
 					{
-						series.Points.Add(new DataPoint(prevAverageBlock, lastBlockTimeValue));
+						lastBlockTimeValue = TimeSpanAxis.ToDouble(array[i].Data);
+						// расширяем значение на предыдущие блоки
+						series.Points.Add(new DataPoint(lastBlock + 1, lastBlockTimeValue));
+
+						// добавляем значение
+						lastBlock = array[i].BlockNumber;
+						series.Points.Add(new DataPoint(lastBlock, lastBlockTimeValue));
 					}
-					lastBlock = array[i].BlockNumber;
-					lastBlockTimeValue = TimeSpanAxis.ToDouble(array[i].Data);
-					series.Points.Add(new DataPoint(array[i].BlockNumber, lastBlockTimeValue));
+					else
+					{
+						// просто добавляем это значение
+						lastBlock = array[i].BlockNumber;
+						lastBlockTimeValue = TimeSpanAxis.ToDouble(array[i].Data);
+						series.Points.Add(new DataPoint(lastBlock, lastBlockTimeValue));
+					}
 				}
 			}
 			_plotModel.InvalidatePlot(true);
