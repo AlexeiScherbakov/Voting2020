@@ -27,12 +27,15 @@ namespace Voting2019.Visualization
 		{
 			var blocks = BlockStart(data, blockNumberSelector, blockTimestampSelector);
 
+			var startBlock = blocks[0].BlockNumber;
+			var endBlock = blocks[blocks.Length - 1].BlockNumber;
+			var totalBlocks = endBlock - startBlock;
 
-			BlockGraphItem<TimeSpan>[] ret = new BlockGraphItem<TimeSpan>[blocks.Length - 1];
+			BlockGraphItem<TimeSpan>[] ret = new BlockGraphItem<TimeSpan>[totalBlocks];
 
 			TimeSpan lastBlockStartTime = blocks[0].Data;
 			int lastBlockNumber = blocks[0].BlockNumber;
-
+			int blockCounter = 0;
 			for (int i = 1; i < blocks.Length; i++)
 			{
 				ref BlockGraphItem<TimeSpan> currentBlock = ref blocks[i];
@@ -42,8 +45,10 @@ namespace Voting2019.Visualization
 
 				var averageBlockTime = blocksTime / numberOfBlocks;
 
-				ret[i - 1] = new BlockGraphItem<TimeSpan>(currentBlock.BlockNumber, averageBlockTime);
-
+				for (int cnt = 0; cnt < numberOfBlocks; cnt++)
+				{
+					ret[blockCounter++] = new BlockGraphItem<TimeSpan>(lastBlockNumber + cnt, averageBlockTime);
+				}
 				lastBlockStartTime = currentBlock.Data;
 				lastBlockNumber = currentBlock.BlockNumber;
 			}

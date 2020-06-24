@@ -79,7 +79,7 @@ namespace VoteAnalyzer
 			// среднее время вычисления блока
 			{
 				var graphItems = BlockGraphBuilder.BlockTime(voteRecords, x => x.BlockNumber, x => x.Time);
-				_averageBlockTime.ShowLastConstValueInterpolatedBlockGraphItems(false, graphItems);
+				_averageBlockTime.ShowLinearIntepolatedBlockGraphItems(false, graphItems);
 			}
 			{
 				var graphItems = BlockGraphBuilder.TransactionPerBlock(voteRecords, x => x.BlockNumber);
