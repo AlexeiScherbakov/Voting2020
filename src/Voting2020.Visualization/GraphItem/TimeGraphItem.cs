@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Voting2019.Visualization
+namespace Voting2020.Visualization
 {
 	public readonly struct TimeGraphItem<T>
 		: IEquatable<TimeGraphItem<T>>

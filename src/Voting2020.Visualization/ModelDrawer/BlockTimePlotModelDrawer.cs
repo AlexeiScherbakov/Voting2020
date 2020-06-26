@@ -1,11 +1,11 @@
+using System;
+using System.Linq;
+
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using System;
-using System.Linq;
-using Voting2020.Visualization;
 
-namespace Voting2019.Visualization
+namespace Voting2020.Visualization
 {
 	public sealed class BlockTimePlotModelDrawer
 		: BaseModelDrawer
@@ -27,7 +27,8 @@ namespace Voting2019.Visualization
 			var xAxis = new LinearAxis()
 			{
 				Position = AxisPosition.Bottom,
-				Key = XAxisKey
+				Key = XAxisKey,
+				Title="Block Number"
 			};
 			_plotModel.Axes.Add(xAxis);
 
@@ -36,12 +37,13 @@ namespace Voting2019.Visualization
 				Position = AxisPosition.Left,
 				Key = YAxisKey,
 				AbsoluteMinimum = TimeSpanAxis.ToDouble(TimeSpan.Zero),
-				Minimum =  TimeSpanAxis.ToDouble(TimeSpan.Zero)
+				Minimum =  TimeSpanAxis.ToDouble(TimeSpan.Zero),
+				Title="Time"
 			};
 			_plotModel.Axes.Add(yAxis);
 		}
 
-		public PlotModel PlotModel
+		public override PlotModel PlotModel
 		{
 			get { return _plotModel; }
 		}
@@ -145,19 +147,5 @@ namespace Voting2019.Visualization
 		{
 			return XAxisKey;
 		}
-	}
-
-
-	public abstract class BaseModelDrawer
-	{
-		protected const string XAxisKey = "x_axis";
-		protected const string YAxisKey = "y_axis";
-
-		
-		/// <summary>
-		/// Возвращает шкалу с номером блока
-		/// </summary>
-		/// <returns></returns>
-		public abstract string GetBlockNumberAxisKey();
 	}
 }

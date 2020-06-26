@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 using OxyPlot;
@@ -5,16 +7,14 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 
 using Voting2020.Core;
-using Voting2020.Visualization;
 
-namespace Voting2019.Visualization
+namespace Voting2020.Visualization
 {
 	public sealed class TransactionPerBlockTimelineModelDrawer
 		: BaseModelDrawer
 	{
 		private readonly PlotModel _plotModel;
 		private readonly TimeSpanAxis _xAxis;
-		private readonly LinearAxis _yAxis;
 
 
 		public TransactionPerBlockTimelineModelDrawer()
@@ -23,73 +23,94 @@ namespace Voting2019.Visualization
 			_xAxis = new TimeSpanAxis()
 			{
 				Position = AxisPosition.Bottom,
-				Key = XAxisKey
+				Key = XAxisKey,
+				MinorGridlineStyle= LineStyle.Dash,
+				MajorGridlineStyle = LineStyle.Solid,
+				MinorStep = TimeSpanAxis.ToDouble(TimeSpan.FromHours(1)),
+				Title="Time"
 			};
 			_plotModel.Axes.Add(_xAxis);
-			_yAxis = new LinearAxis()
-			{
-				Position = AxisPosition.Left,
-				Key = YAxisKey,
-				AbsoluteMinimum = 0,
-				AbsoluteMaximum = 0
-			};
-			_plotModel.Axes.Add(_yAxis);
 		}
 
 
-		public PlotModel PlotModel
+		public override PlotModel PlotModel
 		{
 			get { return _plotModel; }
 		}
 
 
-		private void ConfigureAxes(BlockGraphItem<int>[] array, IBlockTimestampInterpolator blockTimestampInterpolator)
+		private void ConfigureAxes(IBlockTimestampInterpolator blockTimestampInterpolator,BlockGraphItem<int>[][] array)
 		{
 			var xAxis = (TimeSpanAxis) _plotModel.Axes.Where(x => x.Key == XAxisKey).Single();
 			xAxis.SetAxisMinMax(
-				blockTimestampInterpolator.GetBlockTimestamp(array.Min(x => x.BlockNumber)),
-				blockTimestampInterpolator.GetBlockTimestamp(array.Max(x => x.BlockNumber)));
-			var yAxis = _plotModel.Axes.Where(x => x.Key == YAxisKey).Single();
-			yAxis.SetAxisMin(0);
+				blockTimestampInterpolator.GetBlockTimestamp(array.Min(x => x.Min(x => x.BlockNumber))),
+				blockTimestampInterpolator.GetBlockTimestamp(array.Max(x => x.Max(x => x.BlockNumber))));
 		}
 
-		public void Show(BlockGraphItem<int>[] array, IBlockTimestampInterpolator blockTimestampInterpolator)
+		public void Show(IBlockTimestampInterpolator blockTimestampInterpolator,string[] names, BlockGraphItem<int>[][] array)
 		{
+			Contract.Requires(names.Length == array.Length);
+
 			lock (_plotModel.SyncRoot)
 			{
-				ConfigureAxes(array, blockTimestampInterpolator);
+				ConfigureAxes(blockTimestampInterpolator, array);
 
 				_plotModel.Series.Clear();
 
-				var series = new LineSeries()
+				const double GapSize = 0.05;
+				int AxisCount = names.Length;
+				double size = (1 - GapSize * (AxisCount - 1)) / AxisCount;
+				double start = 0;
+
+				for (int axisCounter = 0;axisCounter< names.Length; axisCounter++)
 				{
-					CanTrackerInterpolatePoints = false
-				};
+					var data = array[axisCounter];
 
-				_plotModel.Series.Add(series);
-
-				ref var lastPoint = ref array[0];
-				series.Points.Add(new DataPoint(
-					TimeSpanAxis.ToDouble(blockTimestampInterpolator.GetBlockTimestamp(lastPoint.BlockNumber)),
-					lastPoint.Data));
-
-				int maxVotes = lastPoint.Data;
-				for (int i = 1; i < array.Length; i++)
-				{
-					ref var currentPoint = ref array[i];
-					for (int point = lastPoint.BlockNumber + 1; point < currentPoint.BlockNumber; point++)
+					var yAxisKey = Guid.NewGuid().ToString();
+					var yAxis = new LinearAxis()
 					{
-						var xPoint = TimeSpanAxis.ToDouble(blockTimestampInterpolator.GetBlockTimestamp(point));
-						series.Points.Add(new DataPoint(xPoint, 0));
-					}
-					if (currentPoint.Data > maxVotes)
+						Position = AxisPosition.Left,
+						Key = yAxisKey,
+						StartPosition = start,
+						EndPosition = start + size,
+						Title=names[axisCounter]
+					};
+					start += size + GapSize;
+
+					_plotModel.Axes.Add(yAxis);
+					var series = new LineSeries()
 					{
-						maxVotes = currentPoint.Data;
+						CanTrackerInterpolatePoints = false,
+						YAxisKey = yAxisKey
+					};
+
+					_plotModel.Series.Add(series);
+
+					ref var lastPoint = ref data[0];
+					series.Points.Add(new DataPoint(
+						TimeSpanAxis.ToDouble(blockTimestampInterpolator.GetBlockTimestamp(lastPoint.BlockNumber)),
+						lastPoint.Data));
+
+					int maxVotes = lastPoint.Data;
+					for (int i = 1; i < data.Length; i++)
+					{
+						ref var currentPoint = ref data[i];
+						for (int point = lastPoint.BlockNumber + 1; point < currentPoint.BlockNumber; point++)
+						{
+							var xPoint = TimeSpanAxis.ToDouble(blockTimestampInterpolator.GetBlockTimestamp(point));
+							series.Points.Add(new DataPoint(xPoint, 0));
+						}
+						if (currentPoint.Data > maxVotes)
+						{
+							maxVotes = currentPoint.Data;
+						}
+						series.Points.Add(new DataPoint(TimeSpanAxis.ToDouble(blockTimestampInterpolator.GetBlockTimestamp(currentPoint.BlockNumber)), currentPoint.Data));
+						lastPoint = currentPoint;
 					}
-					series.Points.Add(new DataPoint(TimeSpanAxis.ToDouble(blockTimestampInterpolator.GetBlockTimestamp(currentPoint.BlockNumber)), currentPoint.Data));
-					lastPoint = currentPoint;
+					yAxis.SetAxisMin(0);
+					yAxis.SetAxisMax(maxVotes);
 				}
-				_yAxis.SetAxisMax(maxVotes);
+				
 			}
 			_plotModel.InvalidatePlot(true);
 		}

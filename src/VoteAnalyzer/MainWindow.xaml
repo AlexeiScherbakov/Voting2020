@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:VoteAnalyzer" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:oxy="http://oxyplot.org/wpf"
-        mc:Ignorable="d"
+        xmlns:local="clr-namespace:VoteAnalyzer" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:oxy="http://oxyplot.org/wpf" xmlns:controls="clr-namespace:VoteAnalyzer.Controls"
+		mc:Ignorable="d"
 		SnapsToDevicePixels="True"
         Title="MainWindow" Height="450" Width="800">
     <xctk:BusyIndicator x:Name="_busyIndicator">
@@ -13,27 +13,25 @@
             </Menu>
             <TabControl TabStripPlacement="Left">
                 <TabItem Header="(e) Block Timestamp [g]">
-                    <oxy:PlotView x:Name="_blockTimestampPlotView"/>
+					<controls:BlockGraphItemPlotView x:Name="_blockTimestampPlotView"/>
                 </TabItem>
 				<TabItem Header="(e) Block Timestamp [t]">
-					<DataGrid x:Name="_blockTimestampGridView" AutoGenerateColumns="False"
-							  CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
-							  VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.CacheLengthUnit="Page"
-							  VirtualizingPanel.CacheLength="2" VirtualizingPanel.ScrollUnit="Item">
-						<DataGrid.Columns>
-							<DataGridTextColumn Header="Block Number" IsReadOnly="True" Binding="{Binding Path=BlockNumber,Mode=OneTime}"/>
-							<DataGridTextColumn Header="Block Timestamp" IsReadOnly="True" Binding="{Binding Path=Data,Mode=OneTime}"/>
-						</DataGrid.Columns>
-					</DataGrid>
+					<controls:BlockGraphItemTableView x:Name="_blockTimestampGridView"/>
 				</TabItem>
-				<TabItem Header="(e) Block Time">
-					<oxy:PlotView x:Name="_blockTimePlotView"/>
+				<TabItem Header="(e) Average Block Time [g]">
+					<controls:BlockGraphItemPlotView x:Name="_blockTimePlotView"/>
+				</TabItem>
+				<TabItem Header="(e) Average Block Time [t]">
+					<controls:BlockGraphItemTableView x:Name="_blockTimeGridView"/>
 				</TabItem>
 				<TabItem Header="(e) Transaction per block">
-					<oxy:PlotView x:Name="_transactionPerBlockPlotView"/>
+					<controls:BlockGraphItemPlotView x:Name="_transactionPerBlockPlotView"/>
 				</TabItem>
 				<TabItem Header="(e) Transaction per block Timeline">
-					<oxy:PlotView x:Name="_transactionPerBlockTimelinePlotView"/>
+					<controls:BlockGraphItemPlotView x:Name="_transactionPerBlockTimelinePlotView"/>
+				</TabItem>
+				<TabItem Header="(e) Tr. per district and block Timeline">
+					<controls:BlockGraphItemPlotView x:Name="_transactionPerDistrictAndBlockTimelinePlotView"/>
 				</TabItem>
 			</TabControl>
         </DockPanel>

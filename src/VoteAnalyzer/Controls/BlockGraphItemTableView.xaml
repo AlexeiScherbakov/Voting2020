@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="VoteAnalyzer.Controls.BlockGraphItemTableView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VoteAnalyzer.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+	<DockPanel>
+		<DataGrid x:Name="_gridView" AutoGenerateColumns="False"
+							  CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
+							  VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.CacheLengthUnit="Page"
+							  VirtualizingPanel.CacheLength="2" VirtualizingPanel.ScrollUnit="Item"
+							  SelectionMode="Single">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Block Number" IsReadOnly="True" Binding="{Binding Path=BlockNumber,Mode=OneTime}"/>
+				<DataGridTextColumn Header="Block Time" IsReadOnly="True" Binding="{Binding Path=Data,Mode=OneTime}"/>
+			</DataGrid.Columns>
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Export To Excel" Click="ExportToExcelClick" />
+				</ContextMenu>
+			</DataGrid.ContextMenu>
+		</DataGrid>
+	</DockPanel>
+</UserControl>

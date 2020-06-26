@@ -3,14 +3,14 @@ using System.Linq;
 
 using Voting2020.Core;
 
-namespace Voting2019.Visualization
+namespace Voting2020.Visualization
 {
 	public static class BlockGraphBuilder
 	{
 		public static BlockGraphItem<TimeSpan>[] BlockStart<T>(
 			T[] data,
-			Func<T,int> blockNumberSelector,
-			Func<T,TimeSpan> blockTimestampSelector)
+			Func<T, int> blockNumberSelector,
+			Func<T, TimeSpan> blockTimestampSelector)
 		{
 			var blocks = data.Select(x => new BlockGraphItem<TimeSpan>(
 				blockNumberSelector(x), blockTimestampSelector(x)))
@@ -58,12 +58,14 @@ namespace Voting2019.Visualization
 
 		public static BlockGraphItem<int>[] TransactionPerBlock<T>(
 			T[] data,
+			Func<T, bool> filter,
 			Func<T, int> blockNumberSelector)
 		{
 			var points = data
-					.GroupBy(x => blockNumberSelector(x), (key, votes) => new BlockGraphItem<int>(key, votes.Count()))
-					.OrderBy(x => x.BlockNumber)
-					.ToArray();
+				.Where(x => filter(x))
+				.GroupBy(x => blockNumberSelector(x), (key, votes) => new BlockGraphItem<int>(key, votes.Count()))
+				.OrderBy(x => x.BlockNumber)
+				.ToArray();
 			return points;
 		}
 	}

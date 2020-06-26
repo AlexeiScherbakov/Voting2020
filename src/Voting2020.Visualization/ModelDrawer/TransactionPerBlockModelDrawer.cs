@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 
-using Voting2020.Visualization;
-
-namespace Voting2019.Visualization
+namespace Voting2020.Visualization
 {
 	public sealed class TransactionPerBlockModelDrawer
 		: BaseModelDrawer
@@ -24,7 +20,8 @@ namespace Voting2019.Visualization
 			_xAxis = new LinearAxis()
 			{
 				Position = AxisPosition.Bottom,
-				Key = XAxisKey
+				Key = XAxisKey,
+				Title="Block Number"
 			};
 			_plotModel.Axes.Add(_xAxis);
 			_yAxis = new LinearAxis()
@@ -32,13 +29,14 @@ namespace Voting2019.Visualization
 				Position = AxisPosition.Left,
 				Key = YAxisKey,
 				AbsoluteMinimum = 0,
-				AbsoluteMaximum = 0
+				AbsoluteMaximum = 1,
+				Title="Count"
 			};
 			_plotModel.Axes.Add(_yAxis);
 		}
 
 
-		public PlotModel PlotModel
+		public override PlotModel PlotModel
 		{
 			get { return _plotModel; }
 		}
@@ -82,7 +80,7 @@ namespace Voting2019.Visualization
 						maxVotes = currentPoint.Data;
 					}
 					series.Points.Add(new DataPoint(currentPoint.BlockNumber, currentPoint.Data));
-					lastPoint = currentPoint;
+					lastPoint = ref array[i];
 				}
 				_yAxis.SetAxisMax(maxVotes);
 			}

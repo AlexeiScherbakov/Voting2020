@@ -1,13 +1,13 @@
 using System;
 
-namespace Voting2019.Visualization
+namespace Voting2020.Visualization
 {
 	public readonly struct BlockGraphItem<T>
 		: IEquatable<BlockGraphItem<T>>
 		where T : struct, IEquatable<T>
 	{
-		public readonly int _blockNumber;
-		public readonly T _data;
+		private readonly int _blockNumber;
+		private readonly T _data;
 
 		public BlockGraphItem(int blockNumber, T data)
 		{

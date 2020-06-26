@@ -2,7 +2,7 @@ using System;
 
 using Voting2020.Core;
 
-namespace Voting2019.Visualization
+namespace Voting2020.Visualization
 {
 	public sealed class BlockTimestampInterpolator
 		: IBlockTimestampInterpolator
