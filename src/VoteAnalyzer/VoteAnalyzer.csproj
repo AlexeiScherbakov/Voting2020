@@ -17,12 +17,12 @@
     <ProjectReference Include="..\Voting2020.Visualization\Voting2020.Visualization.csproj" />
   </ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition=" '$(Configuration)'=='Debug' ">
 		<_OutputVoteData Include="$(MSBuildProjectDirectory)\$(OutputPath)" />
 		<_VoteData Include="$(MSBuildProjectDirectory)\..\..\data\**\*.*" />
 	</ItemGroup>
 
-	<Target Name="CopyVoteData" AfterTargets="Build">
+	<Target Name="CopyVoteData" AfterTargets="Build" Condition=" '$(Configuration)'=='Debug' ">
 		<Copy SourceFiles="@(_VoteData)" DestinationFolder="$(MSBuildProjectDirectory)\$(OutputPath)\%(RecursiveDir)" SkipUnchangedFiles="true" UseHardlinksIfPossible="true" />
 	</Target>
 

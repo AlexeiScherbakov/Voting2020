@@ -71,6 +71,14 @@ namespace VoteAnalyzer
 			var path=Assembly.GetExecutingAssembly().Location;
 			var dir = System.IO.Path.GetDirectoryName(path);
 			var ballotsFiles=Directory.GetFiles(dir, "ballots_encrypted_*");
+			if (ballotsFiles.Length == 0)
+			{
+				Dispatcher.Invoke(delegate
+				{
+					MessageBox.Show(this, "Please add ballots_encrypted_* file to program directory");
+				});
+				return;
+			}
 			var voteRecords = fileReader.ReadFromFile(ballotsFiles[ballotsFiles.Length-1]);
 
 			// время записи блока
