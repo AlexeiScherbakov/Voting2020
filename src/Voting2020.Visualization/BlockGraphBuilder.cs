@@ -26,19 +26,24 @@ namespace Voting2020.Visualization
 			Func<T, TimeSpan> blockTimestampSelector)
 		{
 			var blocks = BlockStart(data, blockNumberSelector, blockTimestampSelector);
+			return BlockTime(blocks);
+		}
 
-			var startBlock = blocks[0].BlockNumber;
-			var endBlock = blocks[blocks.Length - 1].BlockNumber;
+		public static BlockGraphItem<TimeSpan>[] BlockTime(
+			BlockGraphItem<TimeSpan>[] blockstartGraphItems)
+		{
+			var startBlock = blockstartGraphItems[0].BlockNumber;
+			var endBlock = blockstartGraphItems[blockstartGraphItems.Length - 1].BlockNumber;
 			var totalBlocks = endBlock - startBlock;
 
 			BlockGraphItem<TimeSpan>[] ret = new BlockGraphItem<TimeSpan>[totalBlocks];
 
-			TimeSpan lastBlockStartTime = blocks[0].Data;
-			int lastBlockNumber = blocks[0].BlockNumber;
+			TimeSpan lastBlockStartTime = blockstartGraphItems[0].Data;
+			int lastBlockNumber = blockstartGraphItems[0].BlockNumber;
 			int blockCounter = 0;
-			for (int i = 1; i < blocks.Length; i++)
+			for (int i = 1; i < blockstartGraphItems.Length; i++)
 			{
-				ref BlockGraphItem<TimeSpan> currentBlock = ref blocks[i];
+				ref BlockGraphItem<TimeSpan> currentBlock = ref blockstartGraphItems[i];
 
 				var blocksTime = currentBlock.Data - lastBlockStartTime;
 				var numberOfBlocks = currentBlock.BlockNumber - lastBlockNumber;

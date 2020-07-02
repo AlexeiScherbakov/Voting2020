@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NaCl.Net" Version="0.1.6-pre" />
     <PackageReference Include="TinyCsvParser" Version="2.5.2" />
   </ItemGroup>
 

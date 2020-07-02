@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Voting2020.Visualization;
 using Voting2020.Core;
+using System.Diagnostics;
 
 namespace VoteAnalyzer
 {
@@ -68,9 +69,9 @@ namespace VoteAnalyzer
 		{
 			var fileReader = new EncryptedVoteFileReader();
 
-			var path=Assembly.GetExecutingAssembly().Location;
+			var path = Assembly.GetExecutingAssembly().Location;
 			var dir = System.IO.Path.GetDirectoryName(path);
-			var ballotsFiles=Directory.GetFiles(dir, "ballots_encrypted_*");
+			var ballotsFiles = Directory.GetFiles(dir, "ballots_encrypted_*");
 			if (ballotsFiles.Length == 0)
 			{
 				Dispatcher.Invoke(delegate
@@ -79,24 +80,23 @@ namespace VoteAnalyzer
 				});
 				return;
 			}
-			var voteRecords = fileReader.ReadFromFile(ballotsFiles[ballotsFiles.Length-1]);
+
+			var voteRecords = fileReader.ReadFromFile(ballotsFiles[ballotsFiles.Length - 1]);
 
 			// время записи блока
-			BlockTimestampInterpolator blockTimestampInterpolator = null;
-			{
-				var graphItems = BlockGraphBuilder.BlockStart(voteRecords, x => x.BlockNumber, x => x.Time);
-				_blockTimestamp.ShowLinearIntepolatedBlockGraphItems(true, graphItems);
-				blockTimestampInterpolator = new BlockTimestampInterpolator(graphItems);
-				_blockTimestampGridView.LoadData(graphItems);
-			}
+			BlockGraphItem<TimeSpan>[] blockStartGraphItems = BlockGraphBuilder.BlockStart(voteRecords, x => x.BlockNumber, x => x.Time);
+			_blockTimestamp.ShowLinearIntepolatedBlockGraphItems(true, blockStartGraphItems);
+			BlockTimestampInterpolator blockTimestampInterpolator = new BlockTimestampInterpolator(blockStartGraphItems);
+			_blockTimestampGridView.LoadData(blockStartGraphItems);
+
 			// среднее время вычисления блока
 			{
-				var graphItems = BlockGraphBuilder.BlockTime(voteRecords, x => x.BlockNumber, x => x.Time);
+				var graphItems = BlockGraphBuilder.BlockTime(blockStartGraphItems);
 				_averageBlockTime.ShowLinearIntepolatedBlockGraphItems(false, graphItems);
 				_blockTimeGridView.LoadData(graphItems);
-			}	
+			}
 			{
-				var graphItems = BlockGraphBuilder.TransactionPerBlock(voteRecords,x=>true, x => x.BlockNumber);
+				var graphItems = BlockGraphBuilder.TransactionPerBlock(voteRecords, x => true, x => x.BlockNumber);
 				// транзакций в блоках
 				_transactionPerBlock.Show(graphItems);
 				// транзакций в блоках по времени
