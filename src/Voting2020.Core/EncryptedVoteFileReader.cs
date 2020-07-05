@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -82,7 +82,7 @@ namespace Voting2020.Core
 
 			TimeSpan? lastTime = null;
 
-			TimeSpan currentShift = TimeSpan.Zero;
+			TimeSpan currentShift = new TimeSpan(25, 3, 0, 0, 0);
 
 			TimeSpan dayShift = new TimeSpan(1, 0, 0, 0, 0);
 			for (int i = 0; i < list.Count; i++)

@@ -1,23 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Voting2020.Visualization;
+
 using Voting2020.Core;
-using System.Diagnostics;
+using Voting2020.Visualization;
 
 namespace VoteAnalyzer
 {
@@ -67,6 +56,11 @@ namespace VoteAnalyzer
 
 		private void LoadData()
 		{
+			LoadEncryptedData();
+		}
+
+		private bool LoadEncryptedData()
+		{
 			var fileReader = new EncryptedVoteFileReader();
 
 			var path = Assembly.GetExecutingAssembly().Location;
@@ -78,15 +72,17 @@ namespace VoteAnalyzer
 				{
 					MessageBox.Show(this, "Please add ballots_encrypted_* file to program directory");
 				});
-				return;
+				return false;
 			}
 
 			var voteRecords = fileReader.ReadFromFile(ballotsFiles[ballotsFiles.Length - 1]);
 
+			_voteDecryptorControl.LoadRecords(voteRecords);
+
 			// время записи блока
-			BlockGraphItem<TimeSpan>[] blockStartGraphItems = BlockGraphBuilder.BlockStart(voteRecords, x => x.BlockNumber, x => x.Time);
+			var blockStartGraphItems = BlockGraphBuilder.BlockStart(voteRecords, x => x.BlockNumber, x => x.Time);
 			_blockTimestamp.ShowLinearIntepolatedBlockGraphItems(true, blockStartGraphItems);
-			BlockTimestampInterpolator blockTimestampInterpolator = new BlockTimestampInterpolator(blockStartGraphItems);
+			var blockTimestampInterpolator = new BlockTimestampInterpolator(blockStartGraphItems);
 			_blockTimestampGridView.LoadData(blockStartGraphItems);
 
 			// среднее время вычисления блока
@@ -125,6 +121,7 @@ namespace VoteAnalyzer
 
 				_transactionPerDistrictPerBlockTimeline.Show(blockTimestampInterpolator, names, graphes);
 			}
+			return true;
 		}
 	}
 }

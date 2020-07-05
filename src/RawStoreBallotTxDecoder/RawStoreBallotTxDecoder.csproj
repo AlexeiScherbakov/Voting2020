@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="protobuf-net" Version="3.0.21" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Voting2020.Core\Voting2020.Core.csproj" />
+  </ItemGroup>
+
+</Project>

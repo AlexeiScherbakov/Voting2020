@@ -33,6 +33,9 @@
 				<TabItem Header="(e) Tr. per district and block Timeline">
 					<controls:BlockGraphItemPlotView x:Name="_transactionPerDistrictAndBlockTimelinePlotView"/>
 				</TabItem>
+				<TabItem Header="Decrypt records">
+					<controls:VoteDecryptorControl x:Name="_voteDecryptorControl"/>
+				</TabItem>
 			</TabControl>
         </DockPanel>
     </xctk:BusyIndicator>

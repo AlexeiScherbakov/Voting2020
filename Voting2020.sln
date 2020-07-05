@@ -17,14 +17,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{4BD08068-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{66304255-1467-42F4-B061-E26BE978C90B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Voting2020.Core.Tests", "tests\Voting2020.Core.Tests\Voting2020.Core.Tests.csproj", "{DE6D5154-2CC4-4BFF-8E33-6BA7ED2DC455}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voting2020.Core.Tests", "tests\Voting2020.Core.Tests\Voting2020.Core.Tests.csproj", "{DE6D5154-2CC4-4BFF-8E33-6BA7ED2DC455}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Voting2020.Visualization", "src\Voting2020.Visualization\Voting2020.Visualization.csproj", "{9B7A7C3A-A582-40E0-A83B-61C236399098}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voting2020.Visualization", "src\Voting2020.Visualization\Voting2020.Visualization.csproj", "{9B7A7C3A-A582-40E0-A83B-61C236399098}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85AED890-EB7A-4710-897F-EF5B94B10AA4}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RawStoreBallotTxDecoder", "src\RawStoreBallotTxDecoder\RawStoreBallotTxDecoder.csproj", "{73FC827A-4474-45A2-AE41-5AA33F68E81C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,10 @@ Global
 		{9B7A7C3A-A582-40E0-A83B-61C236399098}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B7A7C3A-A582-40E0-A83B-61C236399098}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B7A7C3A-A582-40E0-A83B-61C236399098}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73FC827A-4474-45A2-AE41-5AA33F68E81C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73FC827A-4474-45A2-AE41-5AA33F68E81C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73FC827A-4474-45A2-AE41-5AA33F68E81C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73FC827A-4474-45A2-AE41-5AA33F68E81C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +63,7 @@ Global
 		{E60C4B38-31AF-42B7-8397-51B8D8702A48} = {6BC6B202-0A9C-4A96-8C7A-B8FE0555ED10}
 		{DE6D5154-2CC4-4BFF-8E33-6BA7ED2DC455} = {66304255-1467-42F4-B061-E26BE978C90B}
 		{9B7A7C3A-A582-40E0-A83B-61C236399098} = {6BC6B202-0A9C-4A96-8C7A-B8FE0555ED10}
+		{73FC827A-4474-45A2-AE41-5AA33F68E81C} = {6BC6B202-0A9C-4A96-8C7A-B8FE0555ED10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D2080AA3-708B-445D-B5AB-39D31FD92E32}
