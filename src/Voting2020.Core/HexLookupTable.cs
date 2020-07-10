@@ -1,4 +1,4 @@
-﻿namespace Voting2020.Core
+namespace Voting2020.Core
 {
 	internal static class HexLookupTable
 	{
