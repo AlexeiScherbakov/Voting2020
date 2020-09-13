@@ -20,6 +20,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using OxyPlot;
+using OxyPlot.Axes;
 
 using Voting2020.Core;
 
@@ -42,6 +43,16 @@ namespace DegvoterDecoder
 
 			_plotView.Model = _plotModel;
 
+			var passportSeriesAxis = new LinearAxis();
+			passportSeriesAxis.AbsoluteMinimum = passportSeriesAxis.Minimum = 0;
+			passportSeriesAxis.AbsoluteMaximum = passportSeriesAxis.Maximum = 9999;
+			passportSeriesAxis.Position = AxisPosition.Bottom;
+			_plotModel.Axes.Add(passportSeriesAxis);
+
+			var countAxis = new LinearAxis();
+			countAxis.Position = AxisPosition.Left;
+			countAxis.AbsoluteMinimum = countAxis.Minimum = 0;
+			_plotModel.Axes.Add(countAxis);
 
 			this.Loaded += MainWindow_Loaded;
 		}
@@ -104,18 +115,30 @@ namespace DegvoterDecoder
 			{
 				CanTrackerInterpolatePoints = false
 			};
-			foreach(var pair in counters)
+			
+			for (int i = 0; i < 10000; i++)
 			{
-				lineSeries.Points.Add(new OxyPlot.DataPoint(pair.Key, pair.Value));
+				if (counters.TryGetValue(i,out var count))
+				{
+					lineSeries.Points.Add(new OxyPlot.DataPoint(i, count));
+				}
+				else
+				{
+					lineSeries.Points.Add(new OxyPlot.DataPoint(i, 0));
+				}
 			}
-			lineSeries.Points.Sort((x, y) => Math.Sign(x.X - y.X));
-
 
 			_plotModel.Series.Add(lineSeries);
 
+			foreach (var axis in _plotModel.Axes)
+			{
+				axis.AbsoluteMinimum = 0;
+				axis.Minimum = 0;
+			}
+
 			_plotModel.InvalidatePlot(true);
 
-
+			
 		}
 	}
 }
